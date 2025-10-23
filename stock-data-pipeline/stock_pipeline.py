@@ -2,8 +2,13 @@ import requests
 import pandas as pd
 from time import sleep
 from datetime import date
+import os
+from dotenv import load_dotenv
 
-API_KEY = "212AZSGNVRKAYG8W"
+load_dotenv()
+
+API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
+
 
 today_date = date.today().strftime("%Y-%m-%d")
 # List of common stock symbols to fetch data for
@@ -38,3 +43,36 @@ time_series_data[numeric_columns] = time_series_data[numeric_columns].apply(pd.t
 time_series_data.to_csv(f'stock_data/stock_data_{today_date}.csv', index=False) 
 print("Data saved to CSV file.")
 print("Data fetching complete.")
+
+def validate_data(df, symbols):
+    """Check if data meets quality standards"""
+    issues = []
+    
+    # Check if we got data for all symbols
+    fetched_symbols = df['symbol'].unique()
+    missing = set(symbols) - set(fetched_symbols)
+    if missing:
+        issues.append(f"Missing data for: {missing}")
+    
+    # Check for null values
+    null_counts = df.isnull().sum()
+    if null_counts.any():
+        issues.append(f"Null values found: {null_counts[null_counts > 0].to_dict()}")
+    
+    # Check if we have recent data (within last 7 days)
+    latest_date = df['date'].max()
+    days_old = (pd.Timestamp.now() - latest_date).days
+    if days_old > 7:
+        issues.append(f"Data is {days_old} days old")
+    
+    if issues:
+        print("DATA QUALITY ISSUES:")
+        for issue in issues:
+            print(f"  - {issue}")
+        return False
+    else:
+        print("Data quality checks passed")
+        return True
+
+# Add this before saving to CSV:
+validate_data(time_series_data, symbols)
