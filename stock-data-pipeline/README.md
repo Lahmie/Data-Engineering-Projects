@@ -130,6 +130,17 @@ stock-data-pipeline/
 - Data type conversion and validation
 - Structuring data engineering projects for production
 
+
+### Automated Scheduling
+
+This pipeline runs automatically every day at 9 AM UTC via GitHub Actions. You can also trigger it manually:
+
+1. Go to the **Actions** tab in GitHub
+2. Select **Daily Stock Data Pipeline**
+3. Click **Run workflow**
+
+Historical data is automatically committed to the `stock_data/` directory.
+
 ## 🤝 Contributing
 
 This is a learning project, but suggestions and improvements are welcome! Feel free to open an issue or submit a pull request.
