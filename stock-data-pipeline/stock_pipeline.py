@@ -9,6 +9,8 @@ load_dotenv()
 
 API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 
+if not API_KEY:
+    raise ValueError("ALPHA_VANTAGE_API_KEY environment variable not set!")
 
 today_date = date.today().strftime("%Y-%m-%d")
 # List of common stock symbols to fetch data for

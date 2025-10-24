@@ -1,0 +1,7 @@
+services:
+  stock-pipeline:
+    build: .
+    environment:
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+    volumes:
+      - ./stock_data:/app/stock_data
