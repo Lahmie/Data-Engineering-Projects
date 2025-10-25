@@ -4,6 +4,7 @@ from time import sleep
 from datetime import date
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
@@ -11,6 +12,9 @@ API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 
 if not API_KEY:
     raise ValueError("ALPHA_VANTAGE_API_KEY environment variable not set!")
+
+# Create stock_data directory if it doesn't exist
+Path('stock_data').mkdir(exist_ok=True)
 
 today_date = date.today().strftime("%Y-%m-%d")
 # List of common stock symbols to fetch data for
